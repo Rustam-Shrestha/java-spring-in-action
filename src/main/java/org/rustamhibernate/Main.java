@@ -1,6 +1,5 @@
-package org.rustamhibernate; // This package groups your Main class logically.
+package org.rustamhibernate;
 
-// Import necessary Hibernate classes.
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,38 +7,53 @@ import org.hibernate.cfg.Configuration;
 
 public class Main {
     public static void main(String[] args) {
-        // Create an instance of the Student object with sample data.
+        // Create a Student object
         Student rustam = new Student();
-        rustam.setRollNo(2); // Set student roll number.
-        rustam.setAge(22);   // Set student age.
-        rustam.setName("Santosh Shrestha"); // Set student name.
+        rustam.setRollNo(4);
+        rustam.setAge(28);
+        rustam.setName("Benedict Cumberbach");
 
-        // Create a Hibernate Configuration instance to manage settings.
+        Student updating = new Student();
+        //changing two of field primar key being third key
+        updating.setName("Updated Melissa Rauch");
+        updating.setAge(29);
+        updating.setRollNo(3);
         Configuration cfg = new Configuration();
-        cfg.configure(); // Load the default 'hibernate.cfg.xml' configuration file.
+        cfg.configure(); // Load the hibernate.cfg.xml
+        cfg.addAnnotatedClass(Student.class);
 
-        // Add the Student class (annotated with @Entity) to the configuration.
-        cfg.addAnnotatedClass(org.rustamhibernate.Student.class);
-
-        // Build the SessionFactory from the configuration (one per application).
         SessionFactory sf = cfg.buildSessionFactory();
-
-        // Open a session to interact with the database.
         Session session = sf.openSession();
 
-        // Begin a transaction to ensure ACID properties for database operations.
         Transaction transaction = session.beginTransaction();
+        session.merge(updating);
+            transaction.commit();
 
-        // Save the Student object to the database.
-        session.save(rustam);
+        try {
 
-        // Commit the transaction to finalize changes in the database.
-        transaction.commit();
+            // Save the Student object
+            session.persist(rustam);
 
-        // Close the session to release resources.
-        session.close();
-
-        // Close the SessionFactory to release resources.
-        sf.close();
+            // Fetch another Student by primary key
+            Student fetchStudent = session.get(Student.class, 1);
+            if (fetchStudent != null) {
+                System.out.println(fetchStudent.getName());
+            } else {
+                System.out.println("Student with roll number 1 not found.");
+            }
+            Student deleting = null;
+            deleting = session.get(Student.class,1);
+        Transaction deleteTransaction = session.beginTransaction();
+            session.remove(deleting);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+            sf.close();
+        }
     }
 }
