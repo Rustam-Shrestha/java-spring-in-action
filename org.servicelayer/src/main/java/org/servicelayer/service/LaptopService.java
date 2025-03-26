@@ -1,5 +1,5 @@
 package org.servicelayer.service;
-import org.servicelayer.service.LaptopRepository;
+import org.servicelayer.repo.LaptopRepository;
 
 import org.servicelayer.model.Laptop;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package org.servicelayer.service;
+package org.servicelayer.repo;
 
 import org.servicelayer.model.Laptop;
 import org.springframework.stereotype.Repository;
