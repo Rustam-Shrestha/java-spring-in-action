@@ -15,9 +15,11 @@ public class HomeController {
         return "index"; // Spring Boot will look for index.html in the static directory
     }
     @RequestMapping("/add")
-    public String add(@RequestParam("number1") int number1, @RequestParam("number2") int number2, HttpSession session, Model model) {
+    public String add(@RequestParam(value = "number1") int number1, @RequestParam(value = "number2") int number2, HttpSession session, Model model) {
         int result = number1 * number2;
-
+        System.out.println(number1);
+        System.out.println(number2);
+        System.out.println(result);
         model.addAttribute("result", result);
 //    System.out.println(result);
 //    session.setAttribute("result", result);
